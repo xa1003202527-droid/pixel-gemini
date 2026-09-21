@@ -9,6 +9,25 @@ Commands:
   /status       – Show current session status and device profile
 """
 
+import os
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+# 创建一个假网页，用来骗 Render
+class DummyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is running")
+
+def run_dummy_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(('0.0.0.0', port), DummyHandler)
+    server.serve_forever()
+
+# 在 main() 函数里，启动机器人之前，加一句：
+# threading.Thread(target=run_dummy_server, daemon=True).start()
+
 import logging
 import os
 import sys
