@@ -25,8 +25,7 @@ def run_dummy_server():
     server = HTTPServer(('0.0.0.0', port), DummyHandler)
     server.serve_forever()
 
-# 在 main() 函数里，启动机器人之前，加一句：
-# threading.Thread(target=run_dummy_server, daemon=True).start()
+
 
 import logging
 import os
@@ -298,6 +297,8 @@ def main() -> None:
     app.add_handler(CommandHandler("get_link", get_link))
     app.add_handler(CommandHandler("status", status))
 
+    threading.Thread(target=run_dummy_server, daemon=True).start()
+  
     logger.info("Bot is running. Press Ctrl-C to stop.")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
