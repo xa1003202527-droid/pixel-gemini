@@ -220,10 +220,23 @@ def check_gemini_offer(email: str, password: str, device: DeviceProfile) -> Opti
         logger.info("Starting WebDriver for session %s", device.session_id)
         driver = _build_driver(device)
 
-        logged_in = _gmail_login(driver, email, password)
-        if not logged_in:
-            raise GoogleAutomationError("Login failed – please check your credentials.")
-
+        # 跳过登录，直接注入 Cookie
+        import json
+        logger.info("Injecting cookies...")
+        try:
+            driver.get("https://one.google.com/")
+            time.sleep(5)
+            with open('/data/data/com.termux/files/home/pixel-gemini/cookies.json', 'r') as f:
+                cookies = json.load(f)
+            for cookie in cookies:
+                try:
+                    driver.add_cookie(cookie)
+                except Exception as e:
+                    logger.debug(f"Failed to add cookie {cookie.get('name')}: {e}")
+            logger.info("Cookies injected successfully.")
+        except Exception as e:
+            logger.error(f"Failed to inject cookies: {e}")
+            raise GoogleAutomationError("Cookie injection failed.")
         offer_link = _navigate_google_one(driver)
         return offer_link
 
