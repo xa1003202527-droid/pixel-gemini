@@ -61,10 +61,20 @@ def _build_driver(profile: DeviceProfile) -> webdriver.Chrome:
 
     service = Service()  # relies on chromedriver being on PATH (Replit provides it)
     driver = webdriver.Chrome(service=service, options=options)
+
+    # 👇👇👇 核心破解：注入 JS 隐藏 navigator.webdriver 属性
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+    })
+    # 核心破解：强制伪装真实的设备 User-Agent
+    driver.execute_cdp_cmd("Network.setUserAgentOverride", {
+        "userAgent": profile.user_agent
+    })
+    # 👆👆👆 核心破解结束
+
     driver.implicitly_wait(config.IMPLICIT_WAIT)
     driver.set_page_load_timeout(config.PAGE_LOAD_TIMEOUT)
     return driver
-
 
 # ── Login helper ──────────────────────────────────────────────────────────────
 
