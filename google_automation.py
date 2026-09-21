@@ -66,6 +66,8 @@ def _gmail_login(driver: webdriver.Firefox, email: str, password: str) -> bool:
     """Perform Gmail / Google account login."""
     try:
         driver.get(config.GMAIL_LOGIN_URL)
+        time.sleep(5)
+        driver.save_screenshot('/data/data/com.termux/files/home/debug_login.png')
         time.sleep(2)
 
         # ── Email step ────────────────────────────────────────────────────────
