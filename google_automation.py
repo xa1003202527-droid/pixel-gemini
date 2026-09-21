@@ -71,23 +71,33 @@ def _gmail_login(driver: webdriver.Firefox, email: str, password: str) -> bool:
         time.sleep(2)
 
         # ── Email step ────────────────────────────────────────────────────────
-        email_field = _wait_for(driver, By.CSS_SELECTOR, 'input[type="email"]')
+        
+        email_field = WebDriverWait(driver, config.WEBDRIVER_TIMEOUT).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="email"], #identifierId, input[name="identifier"], input[type="text"]'))
+        )
         email_field.clear()
         email_field.send_keys(email)
 
-        next_btn = _wait_for(driver, By.ID, "identifierNext")
+        next_btn = WebDriverWait(driver, config.WEBDRIVER_TIMEOUT).until(
+            EC.presence_of_element_located((By.ID, "identifierNext"))
+        )
         next_btn.click()
-        time.sleep(2)
-
+        time.sleep(5)
+        
         # ── Password step ─────────────────────────────────────────────────────
-        password_field = _wait_for(driver, By.CSS_SELECTOR, 'input[type="password"]')
+
+        password_field = WebDriverWait(driver, config.WEBDRIVER_TIMEOUT).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="password"], input[name="Passwd"]'))
+        )
         password_field.clear()
         password_field.send_keys(password)
 
-        pw_next = _wait_for(driver, By.ID, "passwordNext")
+        pw_next = WebDriverWait(driver, config.WEBDRIVER_TIMEOUT).until(
+            EC.presence_of_element_located((By.ID, "passwordNext"))
+        )
         pw_next.click()
-        time.sleep(3)
-
+        time.sleep(8)
+        
         # ── Verify login ──────────────────────────────────────────────────────
         current_url = driver.current_url
         parsed = urlparse(current_url)
