@@ -52,9 +52,9 @@ GEMINI_OFFER_KEYWORDS = [
 ]
 
 # ── Selenium / WebDriver ──────────────────────────────────────────────────────
-WEBDRIVER_TIMEOUT = 30          # seconds – explicit wait
-IMPLICIT_WAIT = 10              # seconds
-PAGE_LOAD_TIMEOUT = 60          # seconds
+WEBDRIVER_TIMEOUT = 90          # seconds – explicit wait
+IMPLICIT_WAIT = 30              # seconds
+PAGE_LOAD_TIMEOUT = 120          # seconds
 HEADLESS = True                 # always headless on Replit
 
 # ── Session storage ───────────────────────────────────────────────────────────
